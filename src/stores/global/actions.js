@@ -1,7 +1,7 @@
 import LZString from 'lz-string'
 import CryptoJS from 'crypto-js'
 
-const SECRET_KEY = import.meta.env.VITE_SECRET_KEY || 'DEFAULT_FALLBACK_KEY'
+const SECRET_KEY = import.meta.env.VITE_SECRET_KEY || ''
 
 export default {
     /**
@@ -18,6 +18,7 @@ export default {
             throw error
         }
     },
+
     /**
      * Load and decrypt stored data
      */
@@ -30,12 +31,28 @@ export default {
             const decompressed = LZString.decompressFromUTF16(decrypted)
             const parsed = JSON.parse(decompressed)
 
-            // Deep merge so you don't lose structure
             this.userData = {...this.userData, ...parsed}
         } catch (error) {
             console.error('Failed to load user data:', error)
-            // clear corrupted data
             localStorage.removeItem('userData')
         }
+    },
+
+    /**
+     * Toggle dark mode and persist preference
+     */
+    toggleDarkMode() {
+        this.darkMode = !this.darkMode
+        localStorage.setItem('darkMode', JSON.stringify(this.darkMode))
+        document.body.classList.toggle('dark', this.darkMode)
+    },
+
+    /**
+     * Load saved theme on startup
+     */
+    loadThemePreference() {
+        const stored = localStorage.getItem('darkMode')
+        this.darkMode = stored ? JSON.parse(stored) : window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.body.classList.toggle('dark', this.darkMode)
     },
 }

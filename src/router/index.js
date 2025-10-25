@@ -1,105 +1,70 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 /**
- * Global Components
+ * Lazy-loaded route components
  */
-import Home from '@view/Home'
-import Settings from '@view/Settings'
-import NotFound from '@view/NotFound'
+const Home = () => import('@view/Home.vue')
+const Settings = () => import('@view/Settings.vue')
+const NotFound = () => import('@view/NotFound.vue')
 
 /**
- * Patient Components
+ * AMU / Patient
  */
-import PatientFile from '@view/AMU/Patient/PatientFile'
-import VisitationReport from '@view/AMU/Patient/VisitationReport'
-import AppointmentFormat from '@view/AMU/Patient/AppointmentFormat'
-import PilotsLicense from '@view/AMU/Patient/PilotsLicense'
-import PublicRequest from '@view/AMU/Patient/PublicRequest'
+const PatientFile = () => import('@view/AMU/Patient/PatientFile.vue')
+const VisitationReport = () => import('@view/AMU/Patient/VisitationReport.vue')
+const AppointmentFormat = () => import('@view/AMU/Patient/AppointmentFormat.vue')
+const PilotsLicense = () => import('@view/AMU/Patient/PilotsLicense.vue')
+const PublicRequest = () => import('@view/AMU/Patient/PublicRequest.vue')
 
 /**
  * Prescriptions
  */
-import Prescription from '@view/AMU/Prescriptions/Prescription'
-import Methadone from '@view/Prescriptions/Methadone'
-import EyePrescription from '@view/AMU/Prescriptions/EyePrescription'
+const Prescription = () => import('@view/AMU/Prescriptions/Prescription.vue')
+const Methadone = () => import('@view/Prescriptions/Methadone.vue')
+const EyePrescription = () => import('@view/AMU/Prescriptions/EyePrescription.vue')
 
 /**
- * Email Components
+ * Email
  */
-import Email from '@view/Email/Email'
-import AmuEmail from '@view/Email/AmuEmail'
+const Email = () => import('@view/Email/Email.vue')
+const AmuEmail = () => import('@view/Email/AmuEmail.vue')
 
 /**
- * Field Training Components
+ * Field Training / General (placeholders for future use)
  */
-import RideAlong from '@view/FieldTraining/RideAlong'
+const RideAlong = () => import('@view/FieldTraining/RideAlong.vue')
+const DutyReport = () => import('@view/General/DutyReport.vue')
 
 /**
- * General Components
+ * Base route definitions
  */
-import DutyReport from "@view/General/DutyReport";
-
 export const routes = [
     {
-        path: '/amu/patient',
+        path: '/amu',
         name: 'AMU',
         lowerName: 'patient-file',
         children: [
-            {
-                path: '/amu/patient/patient-file',
-                name: 'Patient File',
-                component: PatientFile,
-            },
-            {
-                path: '/amu/patient/pilots-license',
-                name: 'Pilot Examination',
-                component: PilotsLicense,
-            },
-            {
-                path: '/amu/patient/appointment-format',
-                name: 'Appointments',
-                component: AppointmentFormat,
-            },
-            {
-                path: '/amu/patient/public-request',
-                name: 'Public Request',
-                component: PublicRequest,
-            },
-            {
-                path: '/amu/patient/visitation-report',
-                name: 'Visitation Report',
-                component: VisitationReport,
-            },
+            {path: 'patient-file', name: 'Patient File', component: PatientFile},
+            {path: 'pilots-license', name: 'Pilot Examination', component: PilotsLicense},
+            {path: 'appointment-format', name: 'Appointments', component: AppointmentFormat},
+            {path: 'public-request', name: 'Public Request', component: PublicRequest},
+            {path: 'visitation-report', name: 'Visitation Report', component: VisitationReport},
         ],
     },
     {
         path: '/bls',
-        name: "BLS",
-        lowerName: "bls",
-        children: [
-            
-        ]
+        name: 'BLS',
+        lowerName: 'bls',
+        children: [],
     },
     {
         path: '/prescription',
         name: 'Prescriptions',
         lowerName: 'prescription',
         children: [
-            {
-                path: '/amu/prescription/prescription',
-                name: 'Prescription',
-                component: Prescription,
-            },
-            {
-                path: '/prescription/methadone',
-                name: 'Methadone',
-                component: Methadone,
-            },
-            {
-                path: '/amu/prescription/eye-prescription',
-                name: 'Eye Prescription',
-                component: EyePrescription,
-            },
+            {path: 'prescription', name: 'Prescription', component: Prescription},
+            {path: 'methadone', name: 'Methadone', component: Methadone},
+            {path: 'eye-prescription', name: 'Eye Prescription', component: EyePrescription},
         ],
     },
     {
@@ -107,64 +72,61 @@ export const routes = [
         name: 'Email',
         lowerName: 'email',
         children: [
-            {
-                path: '/email/internal-email',
-                name: 'Internal Email',
-                component: Email,
-            },
-            {
-                path: '/email/amu-email',
-                name: 'Amu Email',
-                component: AmuEmail,
-            },
+            {path: 'internal-email', name: 'Internal Email', component: Email},
+            {path: 'amu-email', name: 'Amu Email', component: AmuEmail},
         ],
     },
-//    {
-//        path: '/general',
-//        name: 'General',
-//        lowerName: 'general',
-//        children: [
-//            {
-//                path: '/general/duty-report',
-//                name: 'Duty Report',
-//                component: DutyReport,
-//            },
-//        ],
-//    },
+    // Future routes
     // {
-    //     path: '/field-training',
-    //     name: 'Field Trianing',
-    //     lowerName: 'field-training',
-    //     children: [
-    //         {
-    //             path: '/ride-along',
-    //             name: 'Ride Along',
-    //             component: RideAlong,
-    //         },
-    //     ],
+    //   path: '/general',
+    //   name: 'General',
+    //   lowerName: 'general',
+    //   children: [
+    //     { path: 'duty-report', name: 'Duty Report', component: DutyReport },
+    //   ],
     // },
-    {
-        path: '/settings',
-        name: 'Settings',
-        component: Settings,
-    },
+    // {
+    //   path: '/field-training',
+    //   name: 'Field Training',
+    //   lowerName: 'field-training',
+    //   children: [
+    //     { path: 'ride-along', name: 'Ride Along', component: RideAlong },
+    //   ],
+    // },
+    {path: '/settings', name: 'Settings', component: Settings},
 ]
 
+/**
+ * Automatically prefix child routes with parent paths
+ */
+function normalizeRoutes(routes, parentPath = '') {
+    return routes.map(route => {
+        // Avoid double slashes
+        const fullPath = route.path.startsWith('/') ? route.path : `${parentPath.replace(/\/$/, '')}/${route.path}`
+
+        const normalized = {...route, path: fullPath}
+
+        // Recursively normalize child routes
+        if (route.children && route.children.length) {
+            normalized.children = normalizeRoutes(route.children, fullPath)
+        }
+
+        return normalized
+    })
+}
+
+// Apply normalization before creating router
+const normalizedRoutes = normalizeRoutes(routes)
+
+/**
+ * Router instance
+ */
 const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    ...routes,
-    {
-      path: '/',
-      name: 'Home',
-      component: Home,
+    history: createWebHistory(),
+    routes: [...normalizedRoutes, {path: '/', name: 'Home', component: Home}, {path: '/:catchAll(.*)', name: 'NotFound', component: NotFound}],
+    scrollBehavior() {
+        return {top: 0}
     },
-    {
-      path: '/:catchAll(.*)',
-      name: 'Not Found',
-      component: NotFound,
-    },
-  ],
 })
 
 export default router
