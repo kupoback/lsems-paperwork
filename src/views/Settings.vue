@@ -1,245 +1,213 @@
 <script setup>
-import {globalStore} from '@stores/global'
-import {computed, reactive, ref} from 'vue'
+    import {ref, computed, watch} from 'vue'
+    import {storeToRefs} from 'pinia'
+    import {debounce} from 'lodash-es'
+    import {globalStore} from '@stores/global'
 
-/**
- * Vue Components
- */
-import {FwbButton, FwbInput} from 'flowbite-vue'
-import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
-import {
-    columnWrapper, halfLeftColumn, halfRightColumn, thirdLeftColumn, thirdMiddleColumn, thirdRightColumn
-} from '@utils/css-classes'
+    /**
+     * UI Components
+     */
+    import {FwbButton, FwbInput, FwbToast} from 'flowbite-vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
+    import {columnWrapper, halfLeftColumn, halfRightColumn} from '@utils/css-classes'
 
-let buttonText = 'Save Data'
-let savingText = 'Saving Data'
+    /**
+     * Store
+     */
+    const store = globalStore()
+    const {userData, loading} = storeToRefs(store)
 
-const store = globalStore()
-const {userData, updateState} = store
+    /**
+     * Display helpers
+     */
+    const buttonText = 'Save Data'
+    const savingText = 'Saving Data'
+    const savedSignature = computed(() => userData.value.signature)
 
-const {
-    name,
-    rank,
-    divisionalRanks,
-    signature,
-    monday,
-    tuesday,
-    wednesday,
-    thursday,
-    friday,
-    saturday,
-    sunday,
-    phone,
-} = reactive(userData)
+    /**
+     * Toast state
+     */
+    const showToast = ref(false)
+    const toastType = ref('success')
+    const toastMessage = ref('Settings saved!')
 
-const {
-    amu,
-    ar,
-    bls,
-    cru,
-    forensics,
-    fr,
-    ftd,
-    mr,
-    pr,
-    red,
-} = reactive(divisionalRanks)
+    /**
+     * Toast control
+     */
+    const triggerToast = (type = 'success', message = 'Settings saved!') => {
+        toastType.value = type
+        toastMessage.value = message
+        showToast.value = true
+        setTimeout(() => (showToast.value = false), 2500)
+    }
 
-const savedSignature = computed(() => store.userData.signature)
-const isLoading = computed(() => globalStore().loading)
+    /**
+     * Config arrays
+     */
+    const rankFields = [
+        {
+            key: 'amu',
+            label: 'Advanced Medical Unit',
+            placeholder: 'Doctor',
+        },
+        {
+            key: 'ar',
+            label: 'Air & Rescue',
+            placeholder: 'Pilot',
+        },
+        {
+            key: 'bls',
+            label: 'BLS',
+            placeholder: 'Basic Life Support Trainees',
+        },
+        {
+            key: 'cru',
+            label: 'Crisis Response Unit',
+            placeholder: 'First Responder',
+        },
+        {
+            key: 'forensics',
+            label: 'Forensics',
+            placeholder: 'Serologists',
+        },
+        {
+            key: 'fr',
+            label: 'Fire & Rescue',
+            placeholder: 'Firefighters',
+        },
+        {
+            key: 'ftd',
+            label: 'Field Training',
+            placeholder: 'Field Training Officer',
+        },
+        {
+            key: 'mr',
+            label: 'Mountain Rescue',
+            placeholder: 'Mountain Rescue Operators',
+        },
+        {
+            key: 'pr',
+            label: 'Public Relations',
+            placeholder: 'Public Relations Representative',
+        },
+        {
+            key: 'red',
+            label: 'Recruitment and Employment',
+            placeholder: 'Application Handler',
+        },
+    ]
 
-/**
- * Just disables the save button while the store state is completed
- * @returns {Promise<void>}
- */
-const saveFields = () => {
-    //        store.loading = true
-    //        setTimeout(async () => {
-    //            updateState({
-    //                userData: {
-    //                    internalRank: savedInternalRank.value,
-    //                    name: savedName.value,
-    //                    rank: savedRank.value,
-    //                    signature: savedSignature.value,
-    //                    monday: savedMonday.value,
-    //                    tuesday: savedTuesday.value,
-    //                    wednesday: savedWednesday.value,
-    //                    thursday: savedThursday.value,
-    //                    friday: savedFriday.value,
-    //                    saturday: savedSaturday.value,
-    //                    sunday: savedSunday.value,
-    //                    phone: savedPhone.value,
-    //                },
-    //            })
-    //            store.loading = false
-    //        }, 500)
-}
+    const dayFields = [
+        {key: 'monday', label: 'Monday'},
+        {key: 'tuesday', label: 'Tuesday'},
+        {key: 'wednesday', label: 'Wednesday'},
+        {key: 'thursday', label: 'Thursday'},
+        {key: 'friday', label: 'Friday'},
+        {key: 'saturday', label: 'Saturday'},
+        {key: 'sunday', label: 'Sunday'},
+        {
+            key: 'phone',
+            label: 'Phone',
+            placeholder: '555-5555',
+        },
+    ]
 
-const updateDataState = (value, index) => store.$patch(() => store.userData[index] = value)
-const updateRankState = (value, index) => store.$patch(() => store.userData.divisionalRanks[index] = value)
+    /**
+     * Save logic
+     */
+    const saveFields = async () => {
+        store.loading = true
+        try {
+            await store.saveUserData()
+            triggerToast('success', 'Settings saved successfully!')
+        } catch (error) {
+            console.error(error)
+            triggerToast('error', 'Failed to save settings.')
+        } finally {
+            store.loading = false
+        }
+    }
 
+    /**
+     * Debounced auto-save watcher
+     */
+    const saveDebounced = debounce(() => {
+        try {
+            store.saveUserData()
+            triggerToast('info', 'Settings auto-saved.')
+        } catch (error) {
+            triggerToast('error', 'Auto-save failed.')
+        }
+    }, 800)
+
+    watch(userData, () => saveDebounced(),{deep: true})
 </script>
 
 <template>
-    <div class="page-settings w-full overflow-hidden rounded-lg ring-1 ring-slate-900 dark:ring-slate-100">
+    <div class="relative page-settings w-full overflow-hidden rounded-lg ring-1 ring-slate-900/10 dark:ring-slate-100/10">
         <div class="mx-auto max-w-8xl px-4 py-24 sm:px-6 sm:py-16 lg:px-8">
             <div class="mx-auto max-w-8xl">
                 <BodyHeader
                     title="Profile Settings"
-                    body="This information will be stored to your browsers localStorage. If you clear that, you'll lose your data."
+                    body="This information is stored in your browser's localStorage. Clearing it will remove your data."
                 />
+
                 <div class="mx-auto max-w-3xl">
+                    <!-- Name / Rank -->
                     <div :class="columnWrapper">
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="name"
+                                v-model.lazy="userData.name"
                                 placeholder="FName LName"
                                 label="Your name"
                                 size="md"
-                                @keydown.enter="updateDataState(name, 'name')"
-                                @focusout="updateDataState(name, 'name')"
                             />
                         </fieldset>
                         <fieldset :class="halfRightColumn">
                             <FwbInput
-                                v-model="rank"
+                                v-model.lazy="userData.rank"
                                 placeholder="Department Rank"
                                 label="Your Rank"
                                 size="md"
-                                @keydown.enter="updateDataState(rank, 'rank')"
-                                @focusout="updateDataState(rank, 'rank')"
                             />
                         </fieldset>
                     </div>
 
+                    <!-- Divisional Ranks -->
                     <div :class="columnWrapper">
                         <h3 class="mb-4 w-full">Divisional Ranks</h3>
-
-                        <fieldset :class="halfLeftColumn">
+                        <fieldset
+                            v-for="(field, index) in rankFields"
+                            :key="field.key"
+                            :class="[index % 2 === 0 ? halfLeftColumn : halfRightColumn]"
+                        >
                             <FwbInput
-                                v-model="amu"
-                                placeholder="Doctor"
-                                label="Advanced Medical Unit"
+                                v-model.lazy="userData.divisionalRanks[field.key]"
+                                :label="field.label"
+                                :placeholder="field.placeholder"
                                 size="md"
-                                @keydown.enter="updateRankState(amu, 'amu')"
-                                @focusout="updateRankState(amu, 'amu')"
+                                block-classes="mb-4"
                             />
                         </fieldset>
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="ar"
-                                placeholder="Pilot"
-                                label="Air & Rescue"
-                                size="md"
-                                @keydown.enter="updateRankState(ar, 'ar')"
-                                @focusout="updateRankState(ar, 'ar')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="bls"
-                                placeholder="Basic Life Support Trainees"
-                                label="BLS"
-                                size="md"
-                                @keydown.enter="updateRankState(bls, 'bls')"
-                                @focusout="updateRankState(bls, 'bls')"
-                            />
-                        </fieldset>
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="cru"
-                                placeholder="First Responder"
-                                label="Crisis Response Unit"
-                                size="md"
-                                @keydown.enter="updateRankState(cru, 'cru')"
-                                @focusout="updateRankState(cru, 'cru')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="forensics"
-                                placeholder="Serologists"
-                                label="Forensics"
-                                size="md"
-                                @keydown.enter="updateRankState(forensics, 'forensics')"
-                                @focusout="updateRankState(forensics, 'forensics')"
-                            />
-                        </fieldset>
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="fr"
-                                placeholder="Firefighters"
-                                label="Fire & Rescue"
-                                size="md"
-                                @keydown.enter="updateRankState(fr, 'fr')"
-                                @focusout="updateRankState(fr, 'fr')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="ftd"
-                                placeholder="Field Training Officer"
-                                label="Field Training"
-                                size="md"
-                                @keydown.enter="updateRankState(ftd, 'ftd')"
-                                @focusout="updateRankState(ftd, 'ftd')"
-                            />
-                        </fieldset>
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="mr"
-                                placeholder="Mountain Rescue Operators"
-                                label="Mountain Rescue"
-                                size="md"
-                                @keydown.enter="updateRankState(mr, 'mr')"
-                                @focusout="updateRankState(mr, 'mr')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="pr"
-                                placeholder="Public Relations Representative"
-                                label="Public Relations"
-                                size="md"
-                                @keydown.enter="updateRankState(pr, 'pr')"
-                                @focusout="updateRankState(pr, 'pr')"
-                            />
-                        </fieldset>
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="red"
-                                placeholder="Application Handler"
-                                label="Recruitment and Employment"
-                                size="md"
-                                @keydown.enter="updateRankState(red, 'red')"
-                                @focusout="updateRankState(red, 'red')"
-                            />
-                        </fieldset>
-
                     </div>
 
+                    <!-- Signature -->
                     <div :class="columnWrapper">
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="signature"
+                                v-model.lazy="userData.signature"
                                 label="Signature Url"
                                 size="md"
-                                @keydown.enter="updateDataState(signature, 'signature')"
-                                @focusout="updateDataState(signature, 'signature')"
                             />
                         </fieldset>
                         <fieldset
                             v-if="savedSignature"
                             :class="halfRightColumn"
                         >
-                            <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your saved signature</p>
-                            <div class="bg-white w-full p-4">
+                            <p class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Your saved signature</p>
+                            <div class="w-full bg-white p-4">
                                 <img
-                                    class="mx-auto"
+                                    class="mx-auto max-h-32 object-contain"
                                     :src="savedSignature"
                                     alt="Signature Image"
                                 />
@@ -247,122 +215,112 @@ const updateRankState = (value, index) => store.$patch(() => store.userData.divi
                         </fieldset>
                     </div>
 
+                    <!-- Availability / Phone -->
                     <div :class="columnWrapper">
                         <h3 class="mb-4 w-full">Leave empty for no availability</h3>
-                        <fieldset :class="halfLeftColumn">
+                        <fieldset
+                            v-for="({key, label, placeholder}, index) in dayFields"
+                            :key="key"
+                            :class="[index % 2 === 0 ? halfLeftColumn : halfRightColumn]"
+                        >
                             <FwbInput
-                                v-model="monday"
-                                placeholder="01:00 - 22:00"
-                                label="Monday"
+                                v-model.lazy="userData[key]"
+                                :label="label"
+                                :placeholder="placeholder ?? '01:00 - 22:00'"
                                 size="md"
-                                @keydown.enter="updateDataState(monday, 'monday')"
-                                @focusout="updateDataState(monday, 'monday')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="tuesday"
-                                placeholder="01:00 - 22:00"
-                                label="Tuesday"
-                                size="md"
-                                @keydown.enter="updateDataState(tuesday, 'tuesday')"
-                                @focusout="updateDataState(tuesday, 'tuesday')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="wednesday"
-                                placeholder="01:00 - 22:00"
-                                label="Wednesday"
-                                size="md"
-                                @keydown.enter="updateDataState(wednesday, 'wednesday')"
-                                @focusout="updateDataState(wednesday, 'wednesday')"
-                            />
-
-                        </fieldset>
-
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="thursday"
-                                placeholder="01:00 - 22:00"
-                                label="Thursday"
-                                size="md"
-                                @keydown.enter="updateDataState(thursday, 'thursday')"
-                                @focusout="updateDataState(thursday, 'thursday')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="friday"
-                                placeholder="01:00 - 22:00"
-                                label="Friday"
-                                size="md"
-                                @keydown.enter="updateDataState(friday, 'friday')"
-                                @focusout="updateDataState(friday, 'friday')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="saturday"
-                                placeholder="01:00 - 22:00"
-                                label="Saturday"
-                                size="md"
-                                @keydown.enter="updateDataState(saturday, 'saturday')"
-                                @focusout="updateDataState(saturday, 'saturday')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfLeftColumn">
-                            <FwbInput
-                                v-model="sunday"
-                                placeholder="01:00 - 22:00"
-                                label="Sunday"
-                                size="md"
-                                @keydown.enter="updateDataState(sunday, 'sunday')"
-                                @focusout="updateDataState(sunday, 'sunday')"
-                            />
-                        </fieldset>
-
-                        <fieldset :class="halfRightColumn">
-                            <FwbInput
-                                v-model="phone"
-                                placeholder="5555555"
-                                label="Phone Number"
-                                size="md"
-                                @keydown.enter="updateDataState(phone, 'phone')"
-                                @focusout="updateDataState(phone, 'phone')"
+                                block-classes="mb-4"
                             />
                         </fieldset>
                     </div>
                 </div>
 
-
+                <!-- Save Button -->
                 <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                     <fieldset class="my-8">
-                        <fwb-button
-                            v-if="isLoading"
+                        <FwbButton
+                            v-if="loading"
                             disabled
                             color="alternative"
                             size="lg"
                         >
                             {{ savingText }}
-                        </fwb-button>
-                        <fwb-button
+                        </FwbButton>
+                        <FwbButton
                             v-else
                             size="lg"
                             @click="saveFields"
                         >
                             {{ buttonText }}
-                        </fwb-button>
+                        </FwbButton>
                     </fieldset>
                 </div>
             </div>
         </div>
+
+        <!-- Toast -->
+        <transition name="fade">
+            <div
+                v-if="showToast"
+                class="fixed bottom-6 right-6 z-50"
+            >
+                <FwbToast :type="toastType">
+                    <template #icon>
+                        <svg
+                            v-if="toastType === 'success'"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-green-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414L9 14.414 5.293 10.707a1 1 0 111.414-1.414L9 11.586l6.293-6.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+
+                        <svg
+                            v-else-if="toastType === 'info'"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-blue-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M18 10A8 8 0 11.001 10 8 8 0 0118 10zm-9-4a1 1 0 102 0 1 1 0 00-2 0zm2 8H9V9h2v5z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+
+                        <svg
+                            v-else
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3.707-4.707a1 1 0 011.414 0L10 10.414l2.293 2.879a1 1 0 101.414-1.414L11.414 9l2.293-2.293a1 1 0 10-1.414-1.414L10 7.586 7.707 5.293a1 1 0 00-1.414 1.414L8.586 9l-2.293 2.293a1 1 0 000 1.414z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </template>
+                    {{ toastMessage }}
+                </FwbToast>
+            </div>
+        </transition>
     </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.3s ease;
+    }
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
+</style>
