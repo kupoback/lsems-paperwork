@@ -1,4 +1,4 @@
-import {calculateBmi, formatTemperature} from '@util/mixins'
+import {calculateBmi, formatTemperature} from '@utils/mixins'
 
 export const generatePatientFile = (
     {
@@ -28,7 +28,7 @@ export const generatePatientFile = (
         urinalysis,
     },
     {
-        internalRank,
+        divisionalRanks,
         name,
         rank,
         signature
@@ -36,7 +36,7 @@ export const generatePatientFile = (
     destination,
     newPage = false,
 ) => {
-    if (!internalRank || !name || !rank || !signature) {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/vdLuCPo.png[/img]
@@ -113,7 +113,7 @@ ${urinalysis}
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 [b]Los Santos Emergency Medical Services[/b]
 [/divbox][img]https://i.imgur.com/HNP4ksW.png[/img]`
 

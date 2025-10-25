@@ -1,4 +1,4 @@
-import {dateTimeToUtc} from '@util/mixins'
+import {dateTimeToUtc} from '@utils/mixins'
 
 export const generateVisitationReport = (
     {
@@ -6,8 +6,8 @@ export const generateVisitationReport = (
         diagnosis,
         personalPresent,
         visitReport
-    }, {internalRank, name, rank, signature}, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+    }, {divisionalRanks, name, rank, signature}, destination, newPage = false) => {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/XDND6bf.png[/img]
@@ -31,7 +31,7 @@ ${visitReport}
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 Los Santos Advanced Medicine Division
 [/divbox][img]https://i.imgur.com/HNP4ksW.png[/img]`
 

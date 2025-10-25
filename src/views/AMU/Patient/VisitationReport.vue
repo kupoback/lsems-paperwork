@@ -13,7 +13,7 @@
      */
     import {FwbButton, FwbInput, FwbTextarea} from 'flowbite-vue'
     import VueTailwindDatepicker from 'vue-tailwind-datepicker'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader'
 
     const {links, userData} = globalStore()
     const store = visitationStore()
@@ -37,7 +37,7 @@
     const copyContentsForGov = () => setupContents(true)
     const reset = () => {
         store.data = defaultData
-        router.go('/patient/visitation-report')
+        router.go('/amu//patient/visitation-report')
     }
     //endregion
 </script>

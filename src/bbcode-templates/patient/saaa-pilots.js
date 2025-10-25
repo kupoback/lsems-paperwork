@@ -1,5 +1,5 @@
-export const generateSaaaPilots = ({fullName, phoneNumber, auscultation, coverTest, audioMeterTest, drugTest}, {internalRank, name, rank, signature}, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+export const generateSaaaPilots = ({fullName, phoneNumber, auscultation, coverTest, audioMeterTest, drugTest}, {divisionalRanks, name, rank, signature}, destination, newPage = false) => {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/yrVPI6t.png[/img]
@@ -27,7 +27,7 @@ ${audioMeterTest || 'N/A'}
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 [b]Los Santos Emergency Medical Services[/b]
 [/divbox][img]https://i.imgur.com/HNP4ksW.png[/img]`
 

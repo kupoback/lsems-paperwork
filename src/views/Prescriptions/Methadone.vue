@@ -14,7 +14,7 @@
         thirdLeftColumn,
         thirdMiddleColumn,
         thirdRightColumn,
-    } from "@/util/css-classes"
+    } from "@/utils/css-classes"
 
     /**
      * Vue Components

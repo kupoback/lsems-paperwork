@@ -12,14 +12,14 @@
         columnWrapper,
         halfLeftColumn,
         halfRightColumn,
-    } from '@/util/css-classes'
+    } from '@utils/css-classes'
 
     /**
      * Vue Components
      */
     import {FwbButton, FwbInput, FwbTextarea} from 'flowbite-vue'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
-    import SectionTitle from '@component/SectionTitle/SectionTitle.vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader'
+    import SectionTitle from '@component/SectionTitle/SectionTitle'
 
     const {links, userData} = globalStore()
     const store = pilotsLicenseStore()
@@ -53,7 +53,7 @@
     const copyContentsForSaaa = () => generateSaaaPilotsCert(pilotsLicenseStore().data, userData, links.saaaCert, true)
     const reset = () => {
         store.data = defaultData
-        router.go('/patient/patient-file')
+        router.go('/amu//patient/patient-file')
     }
     //endregion
 </script>

@@ -2,28 +2,27 @@
     /**
      * Vue Scripts
      */
+    import {reactive, ref} from 'vue'
+    import router from '@/router'
     import {globalStore} from '@stores/global'
     import {emailStore} from '@stores/email'
     import {generateEmail} from '@templates/email/email'
-    import {reactive, ref} from 'vue'
-    import router from '@/router'
     import {
         columnWrapper,
         halfLeftColumn,
         halfRightColumn,
-    } from "@/util/css-classes"
+    } from "@/utils/css-classes"
 
     /**
      * Vue Components
      */
     import {FwbButton, FwbInput, FwbTextarea} from 'flowbite-vue'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader'
+    import TextboxBar from "@component/TextboxBar/TextboxBar"
 
     const {links, userData} = globalStore()
     const store = emailStore()
-    const {data, defaultData} = reactive({
-        ...store.$state,
-    })
+    const {data, defaultData} = reactive({...store.$state,})
 
     const {subject, to, body} = reactive(data)
 
@@ -37,7 +36,7 @@
     const copyContentsForGov = () => setupContents(true)
     const reset = () => {
         store.data = defaultData
-        router.go('/email/personal-email')
+        router.go('/email/internal-email')
     }
 </script>
 

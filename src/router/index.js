@@ -1,43 +1,43 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 /**
  * Global Components
  */
-import Home from '@view/Home.vue'
-import Settings from '@view/Settings.vue'
-import NotFound from '@view/NotFound.vue'
+import Home from '@view/Home'
+import Settings from '@view/Settings'
+import NotFound from '@view/NotFound'
 
 /**
  * Patient Components
  */
-import PatientFile from '@view/AMU/Patient/PatientFile.vue'
-import VisitationReport from '@view/AMU/Patient/VisitationReport.vue'
-import AppointmentFormat from '@view/AMU/Patient/AppointmentFormat.vue'
-import PilotsLicense from '@view/AMU/Patient/PilotsLicense.vue'
-import PublicRequest from '@view/AMU/Patient/PublicRequest.vue'
+import PatientFile from '@view/AMU/Patient/PatientFile'
+import VisitationReport from '@view/AMU/Patient/VisitationReport'
+import AppointmentFormat from '@view/AMU/Patient/AppointmentFormat'
+import PilotsLicense from '@view/AMU/Patient/PilotsLicense'
+import PublicRequest from '@view/AMU/Patient/PublicRequest'
 
 /**
  * Prescriptions
  */
-import Prescription from '@view/AMU/Prescriptions/Prescription.vue'
-import Methadone from '@view/Prescriptions/Methadone.vue'
-import EyePrescription from '@view/AMU/Prescriptions/EyePrescription.vue'
+import Prescription from '@view/AMU/Prescriptions/Prescription'
+import Methadone from '@view/Prescriptions/Methadone'
+import EyePrescription from '@view/AMU/Prescriptions/EyePrescription'
 
 /**
  * Email Components
  */
-import Email from '@view/Email/Email.vue'
-import AmuEmail from '@view/Email/AmuEmail.vue'
+import Email from '@view/Email/Email'
+import AmuEmail from '@view/Email/AmuEmail'
 
 /**
  * Field Training Components
  */
-import RideAlong from '@view/FieldTraining/RideAlong.vue'
+import RideAlong from '@view/FieldTraining/RideAlong'
 
 /**
  * General Components
  */
-import DutyReport from "@view/General/DutyReport.vue";
+import DutyReport from "@view/General/DutyReport";
 
 export const routes = [
     {
@@ -151,20 +151,20 @@ export const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes: [
-        ...routes,
-        {
-            path: '/',
-            name: 'Home',
-            component: Home,
-        },
-        {
-            path: '/:catchAll(.*)',
-            name: 'Not Found',
-            component: NotFound,
-        },
-    ],
+  history: createWebHistory(),
+  routes: [
+    ...routes,
+    {
+      path: '/',
+      name: 'Home',
+      component: Home,
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'Not Found',
+      component: NotFound,
+    },
+  ],
 })
 
 export default router

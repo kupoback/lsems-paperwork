@@ -1,7 +1,7 @@
-import {dateToUtc} from '@util/mixins'
+import {dateToUtc} from '@utils/mixins'
 
 export const generateEmail = ({subject, to, body}, {internalRank, name, rank, signature}, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/rLIJtNZ.png[/img]

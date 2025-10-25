@@ -1,7 +1,7 @@
-import {dateTimeToUtc} from '@util/mixins'
+import {dateTimeToUtc} from '@utils/mixins'
 
-export const generatePrescription = ({fullName, phoneNumber, diagnosis, prescription, startDate, endDate}, {internalRank, name, rank, signature}, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+export const generatePrescription = ({fullName, phoneNumber, diagnosis, prescription, startDate, endDate}, {divisionalRanks, name, rank, signature}, destination, newPage = false) => {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/9iRWEvN.png[/img]
@@ -28,7 +28,7 @@ export const generatePrescription = ({fullName, phoneNumber, diagnosis, prescrip
 [divbox=white]
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 Los Santos Advanced Medicine Division
 [/divbox][img]https://i.imgur.com/HNP4ksW.png[/img]`
 

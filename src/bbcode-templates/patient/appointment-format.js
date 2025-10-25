@@ -1,7 +1,7 @@
-import {dateToUtc} from '@util/mixins'
+import {dateToUtc} from '@utils/mixins'
 
-export const generateAppointmentFormat = ({reasonForVisit, dateOfAppointment, timeScheduled}, {internalRank, name, rank, signature}, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+export const generateAppointmentFormat = ({reasonForVisit, dateOfAppointment, timeScheduled}, {divisionalRanks, name, rank, signature}, destination, newPage = false) => {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/oKrEeDx.png[/img]
@@ -23,7 +23,7 @@ ${reasonForVisit}
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 Los Santos Advanced Medicine Division
 [/divbox][img]https://i.imgur.com/HNP4ksW.png[/img]`
 

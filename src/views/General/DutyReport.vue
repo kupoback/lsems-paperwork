@@ -3,7 +3,7 @@
     import {computed, reactive, ref} from 'vue'
     import router from '@/router'
     import {dutyReportStore} from '@stores/duty-report'
-    import {columnWrapper, halfLeftColumn, halfRightColumn} from '@/util/css-classes'
+    import {columnWrapper, halfLeftColumn, halfRightColumn} from '@utils/css-classes'
     import {generateDutyReport} from '@templates/general/duty-report'
 
     /**

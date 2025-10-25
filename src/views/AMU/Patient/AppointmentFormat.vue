@@ -4,21 +4,21 @@
      */
     import {globalStore} from '@stores/global'
     import {appointmentFormatStore} from '@stores/appointment-format'
-    import {generateAppointmentFormat} from '@templates/patient/appointment-format'
     import {reactive, ref} from 'vue'
     import router from '@/router'
     import {
         columnWrapper,
         halfLeftColumn,
         halfRightColumn,
-    } from "@/util/css-classes"
+    } from "@/utils/css-classes"
 
     /**
      * Vue Components
      */
     import {FwbButton, FwbInput, FwbTextarea} from 'flowbite-vue'
     import VueTailwindDatepicker from 'vue-tailwind-datepicker'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader'
+    import {generateAppointmentFormat} from '@templates/patient/appointment-format'
 
     const {links, userData} = globalStore()
     const store = appointmentFormatStore()
@@ -46,7 +46,7 @@
     const copyContentsForGov = () => setupContents(true)
     const reset = () => {
         store.data = defaultData
-        router.go('/patient/appointment-format')
+        router.go('/amu/patient/appointment-format')
     }
     //endregion
 </script>

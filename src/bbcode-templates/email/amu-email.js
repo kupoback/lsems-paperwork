@@ -1,7 +1,7 @@
-import {dateToUtc} from '@util/mixins'
+import {dateToUtc} from '@utils/mixins'
 
-export const generateAmuEmail = ({subject, to, body, addDate, addPhone}, {internalRank, name, rank, signature, monday, tuesday, wednesday, thursday, friday, saturday, sunday, phone}, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+export const generateAmuEmail = ({subject, to, body, addDate, addPhone}, {divisionalRanks, name, rank, signature, monday, tuesday, wednesday, thursday, friday, saturday, sunday, phone}, destination, newPage = false) => {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         let bodyTemplate = `${body}`
@@ -56,7 +56,7 @@ Be well,
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 [b]Los Santos Advanced Medicine Division[/b]
 [/divbox]
 [LSEMSfooter][/LSEMSfooter]`

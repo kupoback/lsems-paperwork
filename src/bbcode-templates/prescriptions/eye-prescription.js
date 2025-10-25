@@ -1,4 +1,4 @@
-import {dateToUtc, timeToUtc} from '@util/mixins'
+import {dateToUtc, timeToUtc} from '@utils/mixins'
 
 export const generateEyePrescription = (
     {
@@ -12,14 +12,14 @@ export const generateEyePrescription = (
         rightAxis,
     },
     {
-        internalRank,
+        divisionalRanks,
         name,
         rank,
         signature
     },
     destination,
     newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/jWHD8Kd.png[/img]
@@ -27,7 +27,7 @@ export const generateEyePrescription = (
 [lsemssubtitle]GENERAL INFORMATION[/lsemssubtitle]
 [divbox=white]
 [b]Issuing Employee:[/b] [i]${name}[/i]
-[b]Employee Rank:[/b] [i]${internalRank} / ${rank}[/i]
+[b]Employee Rank:[/b] [i]${divisionalRanks.amu || ''} / ${rank}[/i]
 [b]Date:[/b] ${dateToUtc()}
 [b]Time:[/b] ${timeToUtc()}
 [/divbox]

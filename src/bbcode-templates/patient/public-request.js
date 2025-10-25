@@ -1,4 +1,4 @@
-import {dateTimeToUtc} from '@util/mixins'
+import {dateTimeToUtc} from '@utils/mixins'
 
 export const generatePublicRequest = (
     {
@@ -6,12 +6,12 @@ export const generatePublicRequest = (
         contactMethod,
         details
     }, {
-        internalRank,
+        divisionalRanks,
         name,
         rank,
         signature
     }, destination, newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/Wxpv58D.png[/img]
@@ -30,7 +30,7 @@ export const generatePublicRequest = (
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 [b]Los Santos Emergency Medical Services[/b]
 [/divbox][img]https://i.imgur.com/HNP4ksW.png[/img]`
 

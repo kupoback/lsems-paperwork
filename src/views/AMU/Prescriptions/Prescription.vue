@@ -11,7 +11,7 @@
         columnWrapper,
         halfLeftColumn,
         halfRightColumn,
-    } from "@/util/css-classes"
+    } from "@/utils/css-classes"
 
     /**
      * Vue Components

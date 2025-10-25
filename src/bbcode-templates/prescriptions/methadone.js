@@ -1,4 +1,4 @@
-import {dateToUtc, timeToUtc} from '@util/mixins'
+import {dateToUtc, timeToUtc} from '@utils/mixins'
 
 export const generateMethadone = (
     {
@@ -10,14 +10,13 @@ export const generateMethadone = (
         educated,
     },
     {
-        internalRank,
         name,
         rank,
         signature
     },
     destination,
     newPage = false) => {
-    if (!internalRank || !name || !rank || !signature) {
+    if (!name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
         const template = `[img]https://i.imgur.com/EhBBYPq.png[/img]

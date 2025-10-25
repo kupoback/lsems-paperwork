@@ -31,7 +31,7 @@
                     alt="AMU Paperwork Generator"
                     class="mr-3 h-6 sm:h-10"
                 />
-                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"> AMU Paperwork Generator </span>
+                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"> LSEMS Paperwork </span>
             </RouterLink>
         </template>
         <template #default="{isShowMenu}">

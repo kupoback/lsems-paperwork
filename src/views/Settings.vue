@@ -1,90 +1,83 @@
 <script setup>
-    import {globalStore} from '@stores/global'
-    import {computed, reactive, ref} from 'vue'
+import {globalStore} from '@stores/global'
+import {computed, reactive, ref} from 'vue'
 
-    /**
-     * Vue Components
-     */
-    import {FwbButton, FwbInput} from 'flowbite-vue'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
-    import {columnWrapper, halfLeftColumn, halfRightColumn, thirdLeftColumn, thirdMiddleColumn, thirdRightColumn} from '@util/css-classes'
+/**
+ * Vue Components
+ */
+import {FwbButton, FwbInput} from 'flowbite-vue'
+import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
+import {
+    columnWrapper, halfLeftColumn, halfRightColumn, thirdLeftColumn, thirdMiddleColumn, thirdRightColumn
+} from '@utils/css-classes'
 
-    let buttonText = 'Save Data'
-    let savingText = 'Saving Data'
+let buttonText = 'Save Data'
+let savingText = 'Saving Data'
 
-    const store = globalStore()
-    const {userData, updateState} = store
+const store = globalStore()
+const {userData, updateState} = store
 
-    const {
-        internalRank,
-        name,
-        rank,
-        signature,
-        monday,
-        tuesday,
-        wednesday,
-        thursday,
-        friday,
-        saturday,
-        sunday,
-        phone,
-    } = reactive(userData)
+const {
+    name,
+    rank,
+    divisionalRanks,
+    signature,
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday,
+    phone,
+} = reactive(userData)
 
-    const savedInternalRank = ref(internalRank)
-    const savedName = ref(name)
-    const savedRank = ref(rank)
-    const savedSignature = ref(signature)
-    const savedMonday = ref(monday)
-    const savedTuesday = ref(tuesday)
-    const savedWednesday = ref(wednesday)
-    const savedThursday = ref(thursday)
-    const savedFriday = ref(friday)
-    const savedSaturday = ref(saturday)
-    const savedSunday = ref(sunday)
-    const savedPhone = ref(phone)
+const {
+    amu,
+    ar,
+    bls,
+    cru,
+    forensics,
+    fr,
+    ftd,
+    mr,
+    pr,
+    red,
+} = reactive(divisionalRanks)
 
-    const isLoading = computed(() => globalStore().loading)
+const savedSignature = computed(() => store.userData.signature)
+const isLoading = computed(() => globalStore().loading)
 
-    const updateInternalRank = () => (store.userData.internalRank = savedInternalRank.value)
-    const updateName = () => (store.userData.name = savedName.value)
-    const updateRank = () => (store.userData.rank = savedRank.value)
-    const updateSignature = () => (store.userData.signature = savedSignature.value)
-    const updateMonday = () => (store.userData.monday = savedMonday.value)
-    const updateTuesday = () => (store.userData.tuesday = savedTuesday.value)
-    const updateWednesday = () => (store.userData.wednesday = savedWednesday.value)
-    const updateThursday = () => (store.userData.thursday = savedThursday.value)
-    const updateFriday = () => (store.userData.friday = savedFriday.value)
-    const updateSaturday = () => (store.userData.saturday = savedSaturday.value)
-    const updateSunday = () => (store.userData.sunday = savedSunday.value)
-    const updatePhone = () => (store.userData.phone = savedPhone.value)
+/**
+ * Just disables the save button while the store state is completed
+ * @returns {Promise<void>}
+ */
+const saveFields = () => {
+    //        store.loading = true
+    //        setTimeout(async () => {
+    //            updateState({
+    //                userData: {
+    //                    internalRank: savedInternalRank.value,
+    //                    name: savedName.value,
+    //                    rank: savedRank.value,
+    //                    signature: savedSignature.value,
+    //                    monday: savedMonday.value,
+    //                    tuesday: savedTuesday.value,
+    //                    wednesday: savedWednesday.value,
+    //                    thursday: savedThursday.value,
+    //                    friday: savedFriday.value,
+    //                    saturday: savedSaturday.value,
+    //                    sunday: savedSunday.value,
+    //                    phone: savedPhone.value,
+    //                },
+    //            })
+    //            store.loading = false
+    //        }, 500)
+}
 
+const updateDataState = (value, index) => store.$patch(() => store.userData[index] = value)
+const updateRankState = (value, index) => store.$patch(() => store.userData.divisionalRanks[index] = value)
 
-    /**
-     * Just disables the save button while the store state is completed
-     * @returns {Promise<void>}
-     */
-    const saveFields = () => {
-        store.loading = true
-        setTimeout(async () => {
-            updateState({
-                userData: {
-                    internalRank: savedInternalRank.value,
-                    name: savedName.value,
-                    rank: savedRank.value,
-                    signature: savedSignature.value,
-                    monday: savedMonday.value,
-                    tuesday: savedTuesday.value,
-                    wednesday: savedWednesday.value,
-                    thursday: savedThursday.value,
-                    friday: savedFriday.value,
-                    saturday: savedSaturday.value,
-                    sunday: savedSunday.value,
-                    phone: savedPhone.value,
-                },
-            })
-            store.loading = false
-        }, 500)
-    }
 </script>
 
 <template>
@@ -97,50 +90,150 @@
                 />
                 <div class="mx-auto max-w-3xl">
                     <div :class="columnWrapper">
-                        <fieldset :class="thirdLeftColumn">
+                        <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="savedName"
+                                v-model="name"
                                 placeholder="FName LName"
                                 label="Your name"
                                 size="md"
-                                @keydown.enter="updateName"
-                                @focusout="updateName"
+                                @keydown.enter="updateDataState(name, 'name')"
+                                @focusout="updateDataState(name, 'name')"
                             />
                         </fieldset>
-                        <fieldset :class="thirdMiddleColumn">
+                        <fieldset :class="halfRightColumn">
                             <FwbInput
-                                v-model="savedRank"
+                                v-model="rank"
                                 placeholder="Department Rank"
                                 label="Your Rank"
                                 size="md"
-                                @keydown.enter="updateRank"
-                                @focusout="updateRank"
-                            />
-                        </fieldset>
-                        <fieldset :class="thirdRightColumn">
-                            <FwbInput
-                                v-model="savedInternalRank"
-                                placeholder="Doctor"
-                                label="AMU Rank"
-                                size="md"
-                                @keydown.enter="updateInternalRank"
-                                @focusout="updateInternalRank"
+                                @keydown.enter="updateDataState(rank, 'rank')"
+                                @focusout="updateDataState(rank, 'rank')"
                             />
                         </fieldset>
                     </div>
 
                     <div :class="columnWrapper">
+                        <h3 class="mb-4 w-full">Divisional Ranks</h3>
+
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="savedSignature"
+                                v-model="amu"
+                                placeholder="Doctor"
+                                label="Advanced Medical Unit"
+                                size="md"
+                                @keydown.enter="updateRankState(amu, 'amu')"
+                                @focusout="updateRankState(amu, 'amu')"
+                            />
+                        </fieldset>
+                        <fieldset :class="halfRightColumn">
+                            <FwbInput
+                                v-model="ar"
+                                placeholder="Pilot"
+                                label="Air & Rescue"
+                                size="md"
+                                @keydown.enter="updateRankState(ar, 'ar')"
+                                @focusout="updateRankState(ar, 'ar')"
+                            />
+                        </fieldset>
+
+                        <fieldset :class="halfLeftColumn">
+                            <FwbInput
+                                v-model="bls"
+                                placeholder="Basic Life Support Trainees"
+                                label="BLS"
+                                size="md"
+                                @keydown.enter="updateRankState(bls, 'bls')"
+                                @focusout="updateRankState(bls, 'bls')"
+                            />
+                        </fieldset>
+                        <fieldset :class="halfRightColumn">
+                            <FwbInput
+                                v-model="cru"
+                                placeholder="First Responder"
+                                label="Crisis Response Unit"
+                                size="md"
+                                @keydown.enter="updateRankState(cru, 'cru')"
+                                @focusout="updateRankState(cru, 'cru')"
+                            />
+                        </fieldset>
+
+                        <fieldset :class="halfLeftColumn">
+                            <FwbInput
+                                v-model="forensics"
+                                placeholder="Serologists"
+                                label="Forensics"
+                                size="md"
+                                @keydown.enter="updateRankState(forensics, 'forensics')"
+                                @focusout="updateRankState(forensics, 'forensics')"
+                            />
+                        </fieldset>
+                        <fieldset :class="halfRightColumn">
+                            <FwbInput
+                                v-model="fr"
+                                placeholder="Firefighters"
+                                label="Fire & Rescue"
+                                size="md"
+                                @keydown.enter="updateRankState(fr, 'fr')"
+                                @focusout="updateRankState(fr, 'fr')"
+                            />
+                        </fieldset>
+
+                        <fieldset :class="halfLeftColumn">
+                            <FwbInput
+                                v-model="ftd"
+                                placeholder="Field Training Officer"
+                                label="Field Training"
+                                size="md"
+                                @keydown.enter="updateRankState(ftd, 'ftd')"
+                                @focusout="updateRankState(ftd, 'ftd')"
+                            />
+                        </fieldset>
+                        <fieldset :class="halfRightColumn">
+                            <FwbInput
+                                v-model="mr"
+                                placeholder="Mountain Rescue Operators"
+                                label="Mountain Rescue"
+                                size="md"
+                                @keydown.enter="updateRankState(mr, 'mr')"
+                                @focusout="updateRankState(mr, 'mr')"
+                            />
+                        </fieldset>
+
+                        <fieldset :class="halfLeftColumn">
+                            <FwbInput
+                                v-model="pr"
+                                placeholder="Public Relations Representative"
+                                label="Public Relations"
+                                size="md"
+                                @keydown.enter="updateRankState(pr, 'pr')"
+                                @focusout="updateRankState(pr, 'pr')"
+                            />
+                        </fieldset>
+                        <fieldset :class="halfRightColumn">
+                            <FwbInput
+                                v-model="red"
+                                placeholder="Application Handler"
+                                label="Recruitment and Employment"
+                                size="md"
+                                @keydown.enter="updateRankState(red, 'red')"
+                                @focusout="updateRankState(red, 'red')"
+                            />
+                        </fieldset>
+
+                    </div>
+
+                    <div :class="columnWrapper">
+                        <fieldset :class="halfLeftColumn">
+                            <FwbInput
+                                v-model="signature"
                                 label="Signature Url"
                                 size="md"
-                                @keydown.enter="updateSignature"
-                                @focusout="updateSignature"
+                                @keydown.enter="updateDataState(signature, 'signature')"
+                                @focusout="updateDataState(signature, 'signature')"
                             />
                         </fieldset>
                         <fieldset
-                             v-if="savedSignature"
+                            v-if="savedSignature"
                             :class="halfRightColumn"
                         >
                             <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your saved signature</p>
@@ -158,90 +251,90 @@
                         <h3 class="mb-4 w-full">Leave empty for no availability</h3>
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="savedMonday"
+                                v-model="monday"
                                 placeholder="01:00 - 22:00"
                                 label="Monday"
                                 size="md"
-                                @keydown.enter="updateMonday"
-                                @focusout="updateMonday"
+                                @keydown.enter="updateDataState(monday, 'monday')"
+                                @focusout="updateDataState(monday, 'monday')"
                             />
                         </fieldset>
 
                         <fieldset :class="halfRightColumn">
                             <FwbInput
-                                v-model="savedTuesday"
+                                v-model="tuesday"
                                 placeholder="01:00 - 22:00"
                                 label="Tuesday"
                                 size="md"
-                                @keydown.enter="updateTuesday"
-                                @focusout="updateTuesday"
+                                @keydown.enter="updateDataState(tuesday, 'tuesday')"
+                                @focusout="updateDataState(tuesday, 'tuesday')"
                             />
                         </fieldset>
 
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="savedWednesday"
+                                v-model="wednesday"
                                 placeholder="01:00 - 22:00"
                                 label="Wednesday"
                                 size="md"
-                                @keydown.enter="updateWednesday"
-                                @focusout="updateWednesday"
+                                @keydown.enter="updateDataState(wednesday, 'wednesday')"
+                                @focusout="updateDataState(wednesday, 'wednesday')"
                             />
 
                         </fieldset>
 
                         <fieldset :class="halfRightColumn">
                             <FwbInput
-                                v-model="savedThursday"
+                                v-model="thursday"
                                 placeholder="01:00 - 22:00"
                                 label="Thursday"
                                 size="md"
-                                @keydown.enter="updateThursday"
-                                @focusout="updateThursday"
+                                @keydown.enter="updateDataState(thursday, 'thursday')"
+                                @focusout="updateDataState(thursday, 'thursday')"
                             />
                         </fieldset>
 
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="savedFriday"
+                                v-model="friday"
                                 placeholder="01:00 - 22:00"
                                 label="Friday"
                                 size="md"
-                                @keydown.enter="updateFriday"
-                                @focusout="updateFriday"
+                                @keydown.enter="updateDataState(friday, 'friday')"
+                                @focusout="updateDataState(friday, 'friday')"
                             />
                         </fieldset>
 
                         <fieldset :class="halfRightColumn">
                             <FwbInput
-                                v-model="savedSaturday"
+                                v-model="saturday"
                                 placeholder="01:00 - 22:00"
                                 label="Saturday"
                                 size="md"
-                                @keydown.enter="updateSaturday"
-                                @focusout="updateSaturday"
+                                @keydown.enter="updateDataState(saturday, 'saturday')"
+                                @focusout="updateDataState(saturday, 'saturday')"
                             />
                         </fieldset>
 
                         <fieldset :class="halfLeftColumn">
                             <FwbInput
-                                v-model="savedSunday"
+                                v-model="sunday"
                                 placeholder="01:00 - 22:00"
                                 label="Sunday"
                                 size="md"
-                                @keydown.enter="updateSunday"
-                                @focusout="updateSunday"
+                                @keydown.enter="updateDataState(sunday, 'sunday')"
+                                @focusout="updateDataState(sunday, 'sunday')"
                             />
                         </fieldset>
 
                         <fieldset :class="halfRightColumn">
                             <FwbInput
-                                v-model="savedPhone"
+                                v-model="phone"
                                 placeholder="5555555"
                                 label="Phone Number"
                                 size="md"
-                                @keydown.enter="updatePhone"
-                                @focusout="updatePhone"
+                                @keydown.enter="updateDataState(phone, 'phone')"
+                                @focusout="updateDataState(phone, 'phone')"
                             />
                         </fieldset>
                     </div>

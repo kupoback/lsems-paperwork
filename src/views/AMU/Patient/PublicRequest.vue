@@ -11,13 +11,13 @@
         columnWrapper,
         halfLeftColumn,
         halfRightColumn,
-    } from "@util/css-classes"
+    } from "@utils/css-classes"
 
     /**
      * Vue Components
      */
     import {FwbButton, FwbInput, FwbTextarea} from 'flowbite-vue'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader'
 
     const {links, userData} = globalStore()
     const store = publicRequestStore()
@@ -39,7 +39,7 @@
     const copyContentsForGov = () => setupContents(true)
     const reset = () => {
         store.data = defaultData
-        router.go('/patient/public-request')
+        router.go('/amu//patient/public-request')
     }
     //endregion
 </script>

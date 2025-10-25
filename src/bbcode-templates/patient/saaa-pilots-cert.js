@@ -1,6 +1,6 @@
-import {dateToUtc} from '@util/mixins'
+import {dateToUtc} from '@utils/mixins'
 
-export const generateSaaaPilotsCert = ({fullName}, {internalRank, name, rank, signature}, destination, newPage = false) => {
+export const generateSaaaPilotsCert = ({fullName}, {divisionalRanks, name, rank, signature}, destination, newPage = false) => {
     if (!internalRank || !name || !rank || !signature) {
         alert('You need to make sure everything in Settings is filled out')
     } else {
@@ -28,7 +28,7 @@ and found medically fit to be educated on and practice as:
 
 [img]${signature}[/img]
 [i]${name}[/i]
-[b]${internalRank} / ${rank}[/b]
+[b]${divisionalRanks.amu || ''} / ${rank}[/b]
 [b]Los Santos Emergency Medical Services[/b]
 
 [/divbox][lsemsfooter]`

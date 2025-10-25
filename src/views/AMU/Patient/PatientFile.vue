@@ -4,19 +4,19 @@
      */
     import {globalStore} from '@stores/global'
     import {patientFileStore} from '@stores/patient-file'
-    import {generatePatientFile} from '@templates/patient/patient-file'
-    import {convertHeightToCm, convertWeightToKg} from '@util/mixins'
+    import {convertHeightToCm, convertWeightToKg} from '@utils/mixins'
     import {reactive, ref} from 'vue'
     import router from '@/router'
-    import {columnWrapper, halfLeftColumn, halfRightColumn} from '@util/css-classes'
+    import {columnWrapper, halfLeftColumn, halfRightColumn} from '@utils/css-classes'
 
     /**
      * Vue Components
      */
     import {FwbButton, FwbInput, FwbTextarea} from 'flowbite-vue'
     import VueTailwindDatepicker from 'vue-tailwind-datepicker'
-    import BodyHeader from '@component/BodyHeader/BodyHeader.vue'
-    import SectionTitle from '@component/SectionTitle/SectionTitle.vue'
+    import BodyHeader from '@component/BodyHeader/BodyHeader'
+    import SectionTitle from '@component/SectionTitle/SectionTitle'
+    import {generatePatientFile} from '@templates/patient/patient-file'
 
     const conversionHelperText = 'If an imperial value is entered, this will be converted to metric.'
     const conversionHeightHelper = `Example: 6'3"`
@@ -92,7 +92,7 @@
     const copyContentsForGov = () => setupContents(true)
     const reset = () => {
         store.data = defaultData
-        router.go('/patient/patient-file')
+        router.go('/amu//patient/patient-file')
     }
     //endregion
 </script>
