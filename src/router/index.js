@@ -3,37 +3,37 @@ import {createRouter, createWebHistory} from 'vue-router'
 /**
  * Lazy-loaded route components
  */
-const Home = () => import('@view/Home.vue')
-const Settings = () => import('@view/Settings.vue')
-const NotFound = () => import('@view/NotFound.vue')
+const Home = () => import('@view/Home')
+const Settings = () => import('@view/Settings')
+const NotFound = () => import('@view/NotFound')
 
 /**
  * AMU / Patient
  */
-const PatientFile = () => import('@view/AMU/Patient/PatientFile.vue')
-const VisitationReport = () => import('@view/AMU/Patient/VisitationReport.vue')
-const AppointmentFormat = () => import('@view/AMU/Patient/AppointmentFormat.vue')
-const PilotsLicense = () => import('@view/AMU/Patient/PilotsLicense.vue')
-const PublicRequest = () => import('@view/AMU/Patient/PublicRequest.vue')
+const PatientFile = () => import('@view/AMU/Patient/PatientFile')
+const VisitationReport = () => import('@view/AMU/Patient/VisitationReport')
+const AppointmentFormat = () => import('@view/AMU/Patient/AppointmentFormat')
+const PilotsLicense = () => import('@view/AMU/Patient/PilotsLicense')
+const PublicRequest = () => import('@view/AMU/Patient/PublicRequest')
 
 /**
  * Prescriptions
  */
-const Prescription = () => import('@view/AMU/Prescriptions/Prescription.vue')
-const Methadone = () => import('@view/Prescriptions/Methadone.vue')
-const EyePrescription = () => import('@view/AMU/Prescriptions/EyePrescription.vue')
+const Prescription = () => import('@view/AMU/Prescriptions/Prescription')
+const Methadone = () => import('@view/Prescriptions/Methadone')
+const EyePrescription = () => import('@view/AMU/Prescriptions/EyePrescription')
 
 /**
  * Email
  */
-const Email = () => import('@view/Email/Email.vue')
-const AmuEmail = () => import('@view/Email/AmuEmail.vue')
+const Email = () => import('@view/Email/Email')
+const AmuEmail = () => import('@view/Email/AmuEmail')
 
 /**
  * Field Training / General (placeholders for future use)
  */
-const RideAlong = () => import('@view/FieldTraining/RideAlong.vue')
-const DutyReport = () => import('@view/General/DutyReport.vue')
+const RideAlong = () => import('@view/FieldTraining/RideAlong')
+const DutyReport = () => import('@view/General/DutyReport')
 
 /**
  * Base route definitions
