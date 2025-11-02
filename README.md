@@ -1,6 +1,6 @@
 # LSEMS AMU Paperwork Generator
 
-This template should help get you started developing with Vue 3 + TailwindCSS in Vite.
+This is a paperwork generator for a GTA 5 RP server for use of the Los Santos Emergency Medical Services Department. The means of this is to output BBCode for posting to the website that this is used on. The project is setup to use TypeScript, but isn't using it at this time.
 
 ## Recommended IDE Setup
 
@@ -13,27 +13,25 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-npm install
 yarn
+// Copy the env file. You'll need to populate the secret key for yourself
+cp .env.example .env
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
 yarn dev
 ```
 
 ### Compile and Minify for Production
 
 ```sh
-npm run build
 yarn build
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
 yarn lint
 ```
