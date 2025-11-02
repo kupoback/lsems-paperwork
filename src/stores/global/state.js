@@ -1,4 +1,6 @@
 import {useStorage} from '@vueuse/core'
+import defaultLogo from "@/assets/images/LSEMS_Default.png"
+
 
 export default () => ({
     darkMode: useStorage('darkMode', true),
@@ -11,7 +13,8 @@ export default () => ({
         prescription: 'https://gov.eclipse-rp.net/viewforum.php?f=2710',
         saaaCert: 'https://gov.eclipse-rp.net/viewforum.php?f=3462',
     },
-    siteLogo: 'https://i.imgur.com/9uGiPqF.png',
+    defaultLogo,
+    siteLogo: defaultLogo,
     divisionalLogos: {
         amu: 'https://i.imgur.com/QYXPM0p.png',
         ar: '',

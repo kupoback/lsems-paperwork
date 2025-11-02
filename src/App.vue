@@ -1,6 +1,16 @@
 <script setup>
+    import {onMounted} from "vue"
     import {RouterView} from 'vue-router'
-    import Navigation from '@component/Navigation/Navigation.vue';
+    import {globalStore} from '@/stores/global'
+
+    import Navigation from '@component/Navigation/Navigation'
+
+    const store = globalStore()
+
+    onMounted(() => {
+        store.updateLogoBySeason()
+    })
+
 </script>
 
 <script>

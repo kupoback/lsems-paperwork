@@ -3,7 +3,16 @@ import CryptoJS from 'crypto-js'
 
 const SECRET_KEY = import.meta.env.VITE_SECRET_KEY || ''
 
+import prideLogo from '@/assets/images/LSEMS_Pride.png'
+import breastCancerLogo from '@/assets/images/LSEMS_BCA.png'
+import halloweenLogo from '@/assets/images/LSEMS_Halloween.png'
+import thanksgivingLogo from '@/assets/images/LSEMS_Fall.png'
+import christmasLogo from '@/assets/images/LSEMS_Christmas.png'
+
 export default {
+    setLogo(logo) {
+        this.siteLogo = logo
+    },
     /**
      * Save user data (compressed + encrypted)
      */
@@ -54,5 +63,39 @@ export default {
         const stored = localStorage.getItem('darkMode')
         this.darkMode = stored ? JSON.parse(stored) : window.matchMedia('(prefers-color-scheme: dark)').matches
         document.body.classList.toggle('dark', this.darkMode)
+    },
+    /**
+     * Update logo based on the current date/month
+     */
+    updateLogoBySeason() {
+        const now = new Date()
+        const month = now.getMonth() + 1 // JS months are 0-based (0–11)
+        const day = now.getDate()
+
+        // 🏳️‍🌈 Pride Month (June)
+        if (month === 6) {
+            this.siteLogo = prideLogo
+
+            // 🎃 Halloween or 🎗 Breast Cancer Awareness (October)
+        } else if (month === 10) {
+            // Option 1: specific ranges within October
+            if (day >= 1 && day <= 24) {
+                this.siteLogo = breastCancerLogo // early October
+            } else if (day >= 23 && day <= 31) {
+                this.siteLogo = halloweenLogo // mid–late October
+            } else {
+                this.siteLogo = halloweenLogo
+            }
+
+            // 🦃 Thanksgiving (November)
+        } else if (month === 11) {
+            this.siteLogo = thanksgivingLogo
+
+            // 🎄 Christmas (December)
+        } else if (month === 12) {
+            this.siteLogo = christmasLogo
+
+            // 🩺 Default logo for all other months
+        }
     },
 }

@@ -1,6 +1,6 @@
 <script setup>
     import {storeToRefs} from 'pinia'
-    import {globalStore} from '@stores/global'
+    import {globalStore} from '@/stores/global'
 
     const store = globalStore()
     const {siteLogo} = storeToRefs(store)
